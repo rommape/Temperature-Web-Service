@@ -17,10 +17,18 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.amazonaws.auth.PropertiesCredentials;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.model.ListQueuesResult;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.amazonaws.services.sqs.model.SendMessageResult;
 import com.xerox.amazonws.sqs2.Message;
 import com.xerox.amazonws.sqs2.MessageQueue;
 import com.xerox.amazonws.sqs2.SQSException;
 import com.xerox.amazonws.sqs2.SQSUtils;
+
+
 
 /**
  * This class demonstrates idiomatic, single-threaded use of SQS in a job

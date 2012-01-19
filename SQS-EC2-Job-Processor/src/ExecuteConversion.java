@@ -29,7 +29,7 @@ import com.amazonaws.services.sns.model.Topic;
  * This is a simple class for executing a temp conversion.
  * Results are stored in simpleDB with unique Item ID
  * 
- * @author bjoern
+ * @author Román Masanés Martínez
  * 
  */
 public class ExecuteConversion implements JobExecutor {
@@ -73,8 +73,7 @@ public class ExecuteConversion implements JobExecutor {
             sendNotification(messageID);
 
 		} catch (AmazonServiceException ase) {
-			System.out
-					.println("Caught an AmazonServiceException, which means your request made it "
+			System.out.println("Caught an AmazonServiceException, which means your request made it "
 							+ "to Amazon SimpleDB, but was rejected with an error response for some reason.");
 			System.out.println("Error Message:    " + ase.getMessage());
 			System.out.println("HTTP Status Code: " + ase.getStatusCode());
@@ -91,7 +90,7 @@ public class ExecuteConversion implements JobExecutor {
 	}
 
 	public String execute(String jobDefinition) throws JobExecutionException {
-		log.info("Executing job = '" + jobDefinition + "'");
+		System.out.println("Executing job = '" + jobDefinition + "'");
 		if (jobDefinition == null) {
 			throw new JobExecutionException("Job definition is null");
 		}
@@ -100,7 +99,7 @@ public class ExecuteConversion implements JobExecutor {
 		}
 		// business logic
 		TemperatureConverter tc=new TemperatureConverter();
-		String[] s=jobDefinition.split(" ");
+		String[] s=jobDefinition.split(":");
 		double value=Double.parseDouble(s[0]);
 		double resultval=0;
 		String resultunit="";
@@ -129,7 +128,7 @@ public class ExecuteConversion implements JobExecutor {
 		String subject="Notification Message: "+messageID;
 		
 		//Create a notification message string
-		String message="The conversion value with ID: "+messageID+", has been already stored into the database.";
+		String message="The conversion value with ID: "+messageID+", has been stored into the database.";
 
 		boolean flag=false;
 
@@ -164,7 +163,7 @@ public class ExecuteConversion implements JobExecutor {
 	
 	
 	/**
-	 * Method used for creating a new Domain if it is the first time called.
+	 * Method used for creating the new Domain if it is not yet created.
 	 * 
 	 * @param myDomain
 	 * @param sdb
@@ -173,7 +172,7 @@ public class ExecuteConversion implements JobExecutor {
 		boolean flag=false;
 
 		// List domains
-        System.out.println("Listing all domains in your account:\n");
+		System.out.println("Listing all domains in your account:\n");
         for (String domainName : sdb.listDomains().getDomainNames()) {
             
             if(domainName.equals(myDomain)){
